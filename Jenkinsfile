@@ -6,10 +6,26 @@ pipeline {
                 echo "Building ${env.BRANCH_NAME}"
             }
         }
-        stage('Run Script') {
+        stage('Test') {
             steps {
-                sh 'bash script.sh'
+                when{
+                  anyOf{
+                      branch'main'
+                      branch'dev'
+                  }
+                }
+                steps {
+                    echo "Running Test ${env.BRANCH_NAME}"
+                }
+            }
+        }
+        stage('Deploy') {
+            when{
+                branch'main'
+                }
+            }
+            steps {
+                echo "Deploying..."
             }
         }
     }
-}
